@@ -1,47 +1,48 @@
-<?php
-?>
+<div ng-controller="TeacherCtrl">
 
-<head>
-	<title> forMaestro</title>
-	<meta charset="UTF-8">
+	<button type="button" ng-click="toggleTeacherModal()" class="btn btn-sm btn-success pull-right">
+		<i class="glyphicon glyphicon-plus">
+		</i> Agregar maestro
+	</button>
 
-</head>
+	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+		<thead>
+		<tr>
+			<th st-sort="Name">Nombre</th>
+			<th st-sort="LastName">Apellido paterno</th>
+			<th st-sort="SecondLastName">Apellido materno</th>
+			<th st-sort="Enrollment">Matrícula</th>
+		</tr>
+		<tr>
+			<th colspan="5"><input st-search="" class="form-control" placeholder="Buscar..." type="text"/></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="teacher in teachers">
+			<td>{{teacher.Name}}</td>
+			<td>{{teacher.LastName}}</td>
+			<td>{{teacher.SecondLastName}}</td>
+			<td>{{teacher.Enrollment}}</td>
+			<td >
+			<button  type="button" ng-click="updateTeacher(teacher); toggleTeacherModal();" class="btn btn-sm btn-default pull-right">
+				<i class="glyphicon glyphicon-pencil">
+				</i>
+			</button>
+			<button type="button" ng-click="removeTeacher(teacher)" class="btn btn-sm btn-danger pull-right">
+				<i class="glyphicon glyphicon-remove">
+				</i>
+			</button>
 
-<body>
-
-  <div id="contenedor">
-
-		<center>
-			<h1  id="tituloFB"> Informacion De Maestros </h1>
-		</center>
-	<!--<style type="text/css">
-				.tftable {font-size:20px;color:#333333;width:150%;border-width: 2px;border-color: #729ea5;border-collapse: collapse;}
-				.tftable th {font-size:20px;background-color:#acc8cc;border-width: 2px;padding: 10px;border-style: solid;border-color: #729ea5;text-align:left;}
-				.tftable tr {background-color:#d4e3e5;}
-				.tftable td {font-size:20px;border-width: 2px;padding: 10px;border-style: solid;border-color: #729ea5;}
-				.tftable tr:hover {background-color: #729CA9;}
-
-	</style>!-->
-							<link rel="stylesheet" type="text/css" href="css/Style.css">
-
-
-		
-
-			<table class="Tabla" border="5">
-			<tr><th>Nombre</th><th>Apellido Paterno</th><th>Apellido Materno</th><th>Matricula</th></tr>
-			<tr><td>Jesus </td><td>Hernandez</td><td>Cosio</td><td>374892</td>
-			<tr><td>Alejandro</td><td>Leyva</td><td>Carrillo</td><td>364791</td>
-			<tr><td>Jesus Antonio</td><td>Rodriguez</td><td>Meza</td><td>354690</td>
-			<tr><td>Victor Manuel</td><td>Dominguez</td><td>Cota</td><td>344589</td>
-			<tr><td>Guadalupe</td><td>Ordaz</td><td>Picos</td><td>334488</td>
-			<tr><td></td><td></td><td></td><td></td>
-
-			</table>
-		
-	  
-		      <input id='boton' type='submit' value='Back '/> 
-	    </center>     
-  </div>
-
-</body>
-
+			</td>
+		</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="10"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+<register-teacher-modal title="Registro" visible="showTeacherModal" ></register-teacher-modal>
+</div>

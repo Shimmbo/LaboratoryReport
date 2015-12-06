@@ -3,17 +3,10 @@
     <head>
         <title>Control de alumnos</title>
         <meta charset="utf-8">
-        <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-
+        <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="vendor/fullcalendar-2.4.0/fullcalendar.css">
         <link rel="stylesheet" href="css/app.css" />
-        <link rel="stylesheet" href="css/Style.css" />
 
     </head>
     <body data-spy="scroll" ng-controller="CalendarCtrl">
@@ -39,15 +32,26 @@
                             <div class="span8">
                                 <tabset>
                                     <tab select="renderCalender('myCalendar1');">
-                                      <tab-heading>
-                                       <i class="glyphicon glyphicon-bell"></i> Calendario
-                                      </tab-heading>
-                                      <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-                                        <h4>{{alertMessage}}</h4>
-                                      </div>
-                                    <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
+                                        <tab-heading>
+                                            <i class="glyphicon glyphicon-bell"></i> Calendario
+                                        </tab-heading>
+                                        <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
+                                            <h4>{{alertMessage}}</h4>
+                                        </div>
+                                        <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
                                    </tab>
-                                
+                                   <tab >
+                                        <tab-heading>
+                                            <i class="glyphicon glyphicon-bell"></i> Maestros
+                                        </tab-heading>
+                                        <teacher-list></teacher-list>
+                                   </tab>
+                                   <tab >
+                                        <tab-heading>
+                                            <i class="glyphicon glyphicon-bell"></i> Laboratorios
+                                        </tab-heading>
+                                        <laboratory-list></laboratory-list>
+                                   </tab>
                                 </tabset>
                             </div>
 
@@ -58,7 +62,7 @@
             </div>
 
         </div>
-  <register-modal title="Registro" visible="showModal"></register-modal>
+        
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-17352735-3']);
@@ -73,14 +77,21 @@
             })();
         </script>
         <script src="vendor/jquery/jquery-1.9.1.min.js"></script>
-        <!--script src="vendor/bootstrap/bootstrap.min.js"></script-->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="vendor/bootstrap/bootstrap.min.js" ></script>
         <script src="vendor/angular/angular.min.js"></script>
         <script src="vendor/angular/ui-bootstrap-tpls-0.13.0.js"></script>
         <script src="vendor/moment/moment.js"></script>
         <script src="vendor/fullcalendar-2.4.0/fullcalendar.js"></script>
         <script src="vendor/fullcalendar-2.4.0//gcal.js"></script>
+        <script src="vendor/smart-table-master/smart-table.min.js"></script>
         <script src="js/calendar.js"></script>
         <script src="js/app.js"></script>
+        <script src="js/controllers/CalendarCtrl.js"></script>
+        <script src="js/controllers/TeacherCtrl.js"></script>
+        <script src="js/controllers/LaboratoryCtrl.js"></script>
+        <script src="js/directives/RegisterTeacherModal.js"></script>
+        <script src="js/directives/TeacherListDirective.js"></script>
+        <script src="js/directives/RegisterLaboratoryModal.js"></script>
+        <script src="js/directives/LaboratoryListDirective.js"></script>
     </body>
 </html>
