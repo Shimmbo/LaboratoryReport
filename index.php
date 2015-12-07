@@ -6,10 +6,11 @@
         <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-theme.min.css" >
         <link rel="stylesheet" href="vendor/fullcalendar-2.4.0/fullcalendar.css">
+        <link rel="stylesheet" href="vendor/select2/css/select2.min.css" />
         <link rel="stylesheet" href="css/app.css" />
 
     </head>
-    <body data-spy="scroll" ng-controller="CalendarCtrl">
+    <body data-spy="scroll" ng-controller="CalendarCtrl" data-ng-init="refreshSelects();initEvents();">
         <header class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -31,14 +32,12 @@
                             </div>
                             <div class="span8">
                                 <tabset>
-                                    <tab select="renderCalender('myCalendar1');">
+                                    <tab select="renderCalender('myCalendar1');" ng-click="refreshSelects();">
                                         <tab-heading>
                                             <i class="glyphicon glyphicon-bell"></i> Calendario
                                         </tab-heading>
-                                        <div class="alert-success calAlert" ng-show="alertMessage != undefined && alertMessage != ''">
-                                            <h4>{{alertMessage}}</h4>
-                                        </div>
                                         <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
+                                        <register-modal title="Registro" visible="showModal"><register-modal>
                                    </tab>
                                    <tab >
                                         <tab-heading>
@@ -84,8 +83,11 @@
         <script src="vendor/fullcalendar-2.4.0/fullcalendar.js"></script>
         <script src="vendor/fullcalendar-2.4.0//gcal.js"></script>
         <script src="vendor/smart-table-master/smart-table.min.js"></script>
+        <script src="vendor/select2/js/select2.min.js"></script>
         <script src="js/calendar.js"></script>
         <script src="js/app.js"></script>
+        <script src="js/directives/Select2Directive.js"></script>
+        <script src="js/directives/RegisterDirective.js"></script>
         <script src="js/controllers/CalendarCtrl.js"></script>
         <script src="js/controllers/TeacherCtrl.js"></script>
         <script src="js/controllers/LaboratoryCtrl.js"></script>

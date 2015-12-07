@@ -1,7 +1,7 @@
 var calendarApp = angular.module('calendarApp');
 
 calendarApp.controller('CalendarCtrl',
-   function($scope, $compile, $timeout, uiCalendarConfig) {
+   function($scope, $compile, $timeout, uiCalendarConfig, $http, $q) {
     $scope.showModal = false;
     var date = new Date();
     var d = date.getDate();
@@ -14,50 +14,49 @@ calendarApp.controller('CalendarCtrl',
             className: 'gcal-event',           // an option!
             currentTimezone: 'America/Chicago' // an option!
     };
+    $scope.refreshSelects = function(){
+      var teachers = $http.get("lib/getTeachers.php");
+          laboratories = $http.get("lib/getLaboratories.php"),
+          circustances = $http.get("lib/getCircustances.php");
+      $q.all([teachers, laboratories, circustances]).then(function(arrayOfResults) { 
+          $scope.teachers = arrayOfResults[0].data;
+          $scope.laboratories = arrayOfResults[1].data;
+          $scope.circustances = arrayOfResults[2].data;
+      });
+    },
+    $scope.initEvents = function(){
+      var registers = $http.get("lib/getRegisters.php");
+      $q.all([registers]).then(function(arrayOfResults) { 
+        angular.forEach(arrayOfResults[0].data, function(value, key){
+          $scope.events.push(value);
+        });
+      });
+    }
+    $scope.returnEmptyString = function (param){
+      return param == null || param == undefined ? "":param;
+    }
     /* event source that contains custom events on the scope */
     $scope.events = [
     ];
-    /* event source that calls a function on every view switch */
-    $scope.eventsF = function (start, end, timezone, callback) {
-      var s = new Date(start).getTime() / 1000;
-      var e = new Date(end).getTime() / 1000;
-      var m = new Date(start).getMonth();
-      var events = [{title: 'Feed Me ' + m,start: s + (50000),end: s + (100000),allDay: false, className: ['customFeed']}];
-      callback(events);
-    };
-    /* alert on eventClick */
-    $scope.alertOnEventClick = function( date, jsEvent, view){
-        $scope.alertMessage = (date.title + ' was clicked ');
-    };
-    /* alert on Drop */
-     $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-       $scope.alertMessage = ('Event Dropped to make dayDelta ' + delta);
-    };
-    /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       $scope.alertMessage = ('Event Resized to make dayDelta ' + delta);
-    };
-    /* add and removes an event source of choice */
-    $scope.addRemoveEventSource = function(sources,source) {
-      var canAdd = 0;
-      angular.forEach(sources,function(value, key){
-        if(sources[key] === source){
-          sources.splice(key,1);
-          canAdd = 1;
-        }
-      });
-      if(canAdd === 0){
-        sources.push(source);
-      }
-    };
+
     /* add custom event*/
-    $scope.addEvent = function() {
-      $scope.events.push({
-        title: 'Open Sesame',
-        start: new Date(y, m, 28),
-        end: new Date(y, m, 29),
-        className: ['openSesame']
-      });
+    $scope.addRegister = function() {
+      $scope.register = this.register;
+      $scope.register.Id_RegisterCircustance = $scope.register.Id_RegisterCircustance == undefined ? null : $scope.register.Id_RegisterCircustance; 
+      $scope.register.Id_Catalog_Hour = $scope.Catalog_Hour;
+      $scope.register.Id_Student = $scope.register.Id_Student == undefined ? null : $scope.register.Id_Student;
+      $scope.register.DateRegister = $scope.LastDateClicked.replace("T", " ");
+      var request = $http.post("lib/addRegister.php",JSON.stringify($scope.register));
+        request.success(function(data, status, headers, config) {
+            angular.forEach(data, function(value , key){
+              $scope.events.push(value);
+            });
+            $scope.showModal = !$scope.showModal;
+        });
+        request.error(function(data, status, headers, config) {
+            alert("Loading teachers failed!");
+        });
+
     };
     /* remove event */
     $scope.remove = function(index) {
@@ -93,20 +92,45 @@ calendarApp.controller('CalendarCtrl',
         minTime:"08:00:00",
         maxTime:"22:00:00",
         slotLabelInterval:"02:00:00",
-        eventClick: $scope.alertOnEventClick,
-        eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize,
         eventRender: $scope.eventRender,
         dayClick: function(date, jsEvent, view, resourceObj) {
-          $scope.showModal = true;
+          $scope.LastDateClicked = date.format();
+
+          var hour =date.format('LT');
+          if(hour == "8:00 AM" || hour == "8:30 AM" || hour == "9:00 AM" || hour == "9:30 AM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T08:00:00";
+            $scope.Catalog_Hour = 1;
+          }
+          else if(hour == "10:00 AM" || hour == "10:30 AM" || hour == "11:00 AM" || hour == "11:30 AM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T10:00:00";
+             $scope.Catalog_Hour = 2;
+          }
+          else if(hour == "12:00 PM" || hour == "12:30 PM" || hour == "1:00 PM" || hour == "1:30 PM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T12:00:00";
+             $scope.Catalog_Hour = 3;
+          }
+          else if(hour == "4:00 PM" || hour == "4:30 PM" || hour == "5:00 PM" || hour == "5:30 PM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T16:00:00";
+             $scope.Catalog_Hour = 4;
+          }
+          else if(hour == "6:00 PM" || hour == "6:30 PM" || hour == "7:00 PM" || hour == "7:30 PM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T18:00:00";
+             $scope.Catalog_Hour = 5;
+          }
+          else if(hour == "8:00 PM" || hour == "8:30 PM" || hour == "9:00 PM" || hour == "9:30 PM"){
+            $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T20:00:00";
+             $scope.Catalog_Hour = 6;
+          }
+
+          $scope.showModal = !$scope.showModal;
         }
       }
     };
+
     $scope.uiConfig.calendar.dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     $scope.uiConfig.calendar.dayNamesShort = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
     $scope.uiConfig.calendar.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     $scope.uiConfig.calendar.monthNamesShort = ["Ene", "Feb", "Mar","Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     /* event sources array*/
-    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
-    $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+    $scope.eventSources = [$scope.events, $scope.eventSource];
 });
