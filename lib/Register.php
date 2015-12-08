@@ -48,7 +48,7 @@
 		        		 VALUES($Id_Laboratory, NULL, NULL, 1, $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
 		        $lastId = $this->insert_id;
 		        $stuffTeacherId = $this->query('SELECT * FROM stuff_teacher WHERE Id_Teacher ='. $Id_Teacher .' AND  Id_Catalog_Hour = '.$Id_Catalog_Hour);
-
+		        
 	        	while($row = $stuffTeacherId->fetch_array(MYSQLI_ASSOC)){
 		        	$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
 	        	}
@@ -65,6 +65,23 @@
 		        return utf8ize($result);
 	    	}catch (Exception $e){
 	    		echo $e->getMessage();
+	    	}
+    	}
+	    public function ConsultReport($object) {
+    		try{
+		        $result = Array();
+		        $Date = utf8_encode($object);
+		        $rSQL = $this->query("CALL sp_get_report('".$Date."')");
+		        
+		        if ($rSQL) {
+		            while ($row = $rSQL->fetch_array(MYSQLI_ASSOC)) {
+		                array_push($result, $row);
+		            }
+		        }
+		        $this->close();
+		        return utf8ize($result);
+	    	} catch (Exception $e){
+
 	    	}
     	}
 	    public function UpdateRegister($object) {

@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-theme.min.css" >
+         <link rel="stylesheet" href="vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" />
         <link rel="stylesheet" href="vendor/fullcalendar-2.4.0/fullcalendar.css">
         <link rel="stylesheet" href="vendor/select2/css/select2.min.css" />
         <link rel="stylesheet" href="css/app.css" />
@@ -51,6 +52,12 @@
                                         </tab-heading>
                                         <laboratory-list></laboratory-list>
                                    </tab>
+                                   <tab>
+                                        <tab-heading>
+                                            <i class="glyphicon glyphicon-bell"></i> Generar reporte
+                                        </tab-heading>
+                                        <report-directive></report-directive>
+                                   </tab>
                                 </tabset>
                             </div>
 
@@ -77,6 +84,7 @@
         </script>
         <script src="vendor/jquery/jquery-1.9.1.min.js"></script>
         <script src="vendor/bootstrap/bootstrap.min.js" ></script>
+        <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js" ></script>
         <script src="vendor/angular/angular.min.js"></script>
         <script src="vendor/angular/ui-bootstrap-tpls-0.13.0.js"></script>
         <script src="vendor/moment/moment.js"></script>
@@ -91,9 +99,12 @@
         <script src="js/controllers/CalendarCtrl.js"></script>
         <script src="js/controllers/TeacherCtrl.js"></script>
         <script src="js/controllers/LaboratoryCtrl.js"></script>
+        <script src="js/controllers/ReportCtrl.js"></script>
+        <script src="js/directives/datePickerDirective.js"></script>
         <script src="js/directives/RegisterTeacherModal.js"></script>
         <script src="js/directives/TeacherListDirective.js"></script>
         <script src="js/directives/RegisterLaboratoryModal.js"></script>
         <script src="js/directives/LaboratoryListDirective.js"></script>
+         <script src="js/directives/ReportDirective.js"></script>
     </body>
 </html>
