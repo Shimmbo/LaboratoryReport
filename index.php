@@ -1,3 +1,8 @@
+<?php
+  session_start();
+  if(empty($_SESSION['login_user']))
+    header('Location: login.php');
+?>
 <!DOCTYPE html>
 <html lang="es" ng-app="calendarApp" id="top">
     <head>
@@ -64,7 +69,9 @@
                                         </tab-heading>
                                         <report-directive></report-directive>
                                    </tab>
+                                   <a href="logout.php" class="btn btn-success pull-right">Cerrar sesión</a>
                                 </tabset>
+
                             </div>
 
                         </div>
