@@ -51,6 +51,13 @@
                                         </tab-heading>
                                         <laboratory-list></laboratory-list>
                                    </tab>
+                                    <tab >
+                                        <tab-heading>
+                                            <i class="glyphicon glyphicon-bell"></i> Asignar materias
+                                        </tab-heading>
+                                        <stuff-teacher-list></stuff-teacher-list>
+                                   </tab>
+                                   
                                    <tab>
                                         <tab-heading>
                                             <i class="glyphicon glyphicon-bell"></i> Generar reporte
@@ -100,6 +107,7 @@
         <script src="js/controllers/TeacherCtrl.js"></script>
         <script src="js/controllers/LaboratoryCtrl.js"></script>
         <script src="js/controllers/ReportCtrl.js"></script>
+        <script src="js/controllers/AssignStuffCtrl.js"></script>
         <script src="js/directives/datePickerDirective.js"></script>
         <script src="js/directives/RegisterTeacherModal.js"></script>
         <script src="js/directives/TeacherListDirective.js"></script>
@@ -107,5 +115,7 @@
         <script src="js/directives/LaboratoryListDirective.js"></script>
         <script src="js/directives/ReportDirective.js"></script>
         <script src="js/directives/EditRegisterDirective.js"></script>
+        <script src="js/directives/assignStuffDirective.js"></script>
+        <script src="js/directives/assignStuffModal.js"></script>
     </body>
 </html>

@@ -91,13 +91,17 @@
     	}
 	    public function UpdateRegister($object) {
 	    	try{
-	    		$Id_Teacher = utf8_encode($object['Id_Teacher']);
-		    	$Name = utf8_encode($object['Name']);
-		    	$LastName = utf8_encode($object['LastName']);
-		    	$SecondLastName = utf8_encode($object['SecondLastName']);
-		    	$Enrollment = utf8_encode($object['Enrollment']);
-		        $rSQL = $this->query("UPDATE Teacher SET Name = '$Name', LastName = '$LastName', SecondLastName = '$SecondLastName', Enrollment = '$Enrollment' WHERE Id_Teacher = $Id_Teacher");
+		    	$Id_Laboratory = intval(utf8_encode($object['Id_Laboratory']));
+		    	$Id_Teacher = intval(utf8_encode($object['Id_Teacher']));
+		    	$Id_Student =empty($object['Id_Student']) ? "NULL" : utf8_encode($object['Id_Student']);
+		    	$Id_RegisterCircustance = empty($object['Id_RegisterCircustance']) ? "NULL" : utf8_encode($object['Id_RegisterCircustance']);
+		    	$StudentsAssistanceNumber = utf8_encode($object['StudentsAssistanceNumber']);
+		    	$Comments = utf8_encode($object['Comments']);
+	    		$Id_Register_Teacher = utf8_encode($object['Id_Register_Teacher']);
+		        $rSQL = $this->query("CALL update_register_teacher ($Id_Register_Teacher, $Id_Laboratory, $Id_Student, $Id_RegisterCircustance, $StudentsAssistanceNumber, '$Comments')");
+
 		        $this->close();
+
 	    	}catch (Exception $e){
 	    		echo $e->getMessage();
 	    	}

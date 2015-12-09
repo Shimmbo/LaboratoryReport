@@ -63,6 +63,19 @@ calendarApp.controller('CalendarCtrl',
         });
 
     };
+    $scope.editRegister = function() {
+      $scope.register = this.register;
+      $scope.register.Id_RegisterCircustance = $scope.register.Id_RegisterCircustance == undefined ? null : $scope.register.Id_RegisterCircustance; 
+      $scope.register.Id_Student = $scope.register.Id_Student == undefined ? null : $scope.register.Id_Student;
+      var request = $http.post("lib/updateRegister.php",JSON.stringify($scope.register));
+        request.success(function(data, status, headers, config) {
+
+          $scope.showModal = false;
+        });
+        request.error(function(data, status, headers, config) {
+            alert("Loading teachers failed!");
+      });
+    }
     /* remove event */
     $scope.remove = function(index) {
       $scope.events.splice(index,1);
@@ -139,6 +152,7 @@ calendarApp.controller('CalendarCtrl',
           $scope.register.Id_Teacher = calEvent.Id_Teacher;
           $scope.register.Id_RegisterCircustance = calEvent.Id_Catalog_Circustance;
           $scope.register.StudentsAssistanceNumber = calEvent.StudentsAssistanceNumber;
+          $scope.register.Id_Register_Teacher = calEvent.id;
           
         }
       }
