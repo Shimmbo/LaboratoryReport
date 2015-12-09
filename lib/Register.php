@@ -37,20 +37,25 @@
 	    	try{
 		    	$Id_Laboratory = utf8_encode($object['Id_Laboratory']);
 		    	$Id_Teacher = utf8_encode($object['Id_Teacher']);
-		    	$Id_Student = $object['Id_Student'] == NULL ? NULL : utf8_encode($object['Id_Student']);
-		    	$Id_RegisterCircustance = $object['Id_RegisterCircustance'] == NULL ? NULL : utf8_encode($object['Id_RegisterCircustance']);
+		    	$Id_Student =empty($object['Id_Student']) ? "NULL" : utf8_encode($object['Id_Student']);
+		    	$Id_RegisterCircustance = empty($object['Id_RegisterCircustance']) ? "NULL" : utf8_encode($object['Id_RegisterCircustance']);
 		    
 		    	$StudentsAssistanceNumber = utf8_encode($object['StudentsAssistanceNumber']);
 		    	$Id_Catalog_Hour = utf8_encode($object['Id_Catalog_Hour']);
+
 		    	$timestamp = strtotime($object['DateRegister']);
 		    	$DateRegister = date("Y-m-d H:i:s", $timestamp);
+
+		    	$stuffTeacherId = $this->query('SELECT * FROM stuff_teacher WHERE Id_Teacher ='. $Id_Teacher .' AND  Id_Catalog_Hour = '.$Id_Catalog_Hour);
+		        if(!$stuffTeacherId->num_rows > 0){
+		        	return array('Status'=>400, 'Message' => 'El maestro no tiene asignada materia para esta hora');
+	        	}
+
 		        $rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date)
-		        		 VALUES($Id_Laboratory, NULL, NULL, 1, $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
+		        		 VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", 1, $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
 		        $lastId = $this->insert_id;
-		        $stuffTeacherId = $this->query('SELECT * FROM stuff_teacher WHERE Id_Teacher ='. $Id_Teacher .' AND  Id_Catalog_Hour = '.$Id_Catalog_Hour);
-		        
 	        	while($row = $stuffTeacherId->fetch_array(MYSQLI_ASSOC)){
-		        	$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
+    				$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
 	        	}
 	        	$lastId = $this->insert_id;
 		        $result = Array();

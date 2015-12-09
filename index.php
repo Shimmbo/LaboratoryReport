@@ -38,7 +38,6 @@
                                             <i class="glyphicon glyphicon-bell"></i> Calendario
                                         </tab-heading>
                                         <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
-                                        <register-modal title="Registro" visible="showModal"><register-modal>
                                    </tab>
                                    <tab >
                                         <tab-heading>
@@ -68,7 +67,8 @@
             </div>
 
         </div>
-        
+        <edit-register-modal title="Registro" visible="showEditModal"><edit-register-modal>
+        <register-modal title="Registro" visible="showModal"><register-modal>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-17352735-3']);
@@ -105,6 +105,7 @@
         <script src="js/directives/TeacherListDirective.js"></script>
         <script src="js/directives/RegisterLaboratoryModal.js"></script>
         <script src="js/directives/LaboratoryListDirective.js"></script>
-         <script src="js/directives/ReportDirective.js"></script>
+        <script src="js/directives/ReportDirective.js"></script>
+        <script src="js/directives/EditRegisterDirective.js"></script>
     </body>
 </html>

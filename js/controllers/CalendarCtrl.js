@@ -3,6 +3,8 @@ var calendarApp = angular.module('calendarApp');
 calendarApp.controller('CalendarCtrl',
    function($scope, $compile, $timeout, uiCalendarConfig, $http, $q) {
     $scope.showModal = false;
+    $scope.showEditModal = false;
+    $scope.register = {Id_Laboratory:"",Id_Teacher:"",Id_RegisterCircustance:"",StudentsAssistanceNumber:""};
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -48,6 +50,9 @@ calendarApp.controller('CalendarCtrl',
       $scope.register.DateRegister = $scope.LastDateClicked.replace("T", " ");
       var request = $http.post("lib/addRegister.php",JSON.stringify($scope.register));
         request.success(function(data, status, headers, config) {
+          if(data.Status){
+            alert("El maestro no tiene materia asignada en este horario");
+          }
             angular.forEach(data, function(value , key){
               $scope.events.push(value);
             });
@@ -93,9 +98,12 @@ calendarApp.controller('CalendarCtrl',
         maxTime:"22:00:00",
         slotLabelInterval:"02:00:00",
         eventRender: $scope.eventRender,
+        eventAfterRender: function(event, element, view){
+          $(element).css('height','20px');
+        },
         dayClick: function(date, jsEvent, view, resourceObj) {
           $scope.LastDateClicked = date.format();
-
+          
           var hour =date.format('LT');
           if(hour == "8:00 AM" || hour == "8:30 AM" || hour == "9:00 AM" || hour == "9:30 AM"){
             $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T08:00:00";
@@ -122,13 +130,22 @@ calendarApp.controller('CalendarCtrl',
              $scope.Catalog_Hour = 6;
           }
 
-          $scope.showModal = !$scope.showModal;
+          $scope.showModal = true;
+        },
+        eventClick : function(calEvent, jsEvent, view){
+          $scope.showEditModal = true;
+          console.log(calEvent);
+          $scope.register.Id_Laboratory = calEvent.Id_Laboratory;
+          $scope.register.Id_Teacher = calEvent.Id_Teacher;
+          $scope.register.Id_RegisterCircustance = calEvent.Id_Catalog_Circustance;
+          $scope.register.StudentsAssistanceNumber = calEvent.StudentsAssistanceNumber;
+          
         }
       }
     };
 
     $scope.uiConfig.calendar.dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    $scope.uiConfig.calendar.dayNamesShort = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
+    $scope.uiConfig.calendar.dayNamesShort = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
     $scope.uiConfig.calendar.monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     $scope.uiConfig.calendar.monthNamesShort = ["Ene", "Feb", "Mar","Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     /* event sources array*/

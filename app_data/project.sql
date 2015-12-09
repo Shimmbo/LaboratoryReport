@@ -171,7 +171,7 @@ CREATE TABLE `register_teacher` (
   KEY `Fk_Id_Register_Register_Register_Teacher_idx` (`Id_Register`),
   CONSTRAINT `Fk_Id_Register_Register_Register_Teacher` FOREIGN KEY (`Id_Register`) REFERENCES `register` (`Id_Register`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `Fk_Id_Stuff_Teacher_Stuff_Teacher_Register` FOREIGN KEY (`Id_Stuff_Teacher`) REFERENCES `stuff_teacher` (`Id_Stuff_Teacher`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +180,7 @@ CREATE TABLE `register_teacher` (
 
 LOCK TABLES `register_teacher` WRITE;
 /*!40000 ALTER TABLE `register_teacher` DISABLE KEYS */;
-INSERT INTO `register_teacher` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5),(6,1,6),(7,2,7);
+INSERT INTO `register_teacher` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5);
 /*!40000 ALTER TABLE `register_teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,7 +295,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES (1,'JesÃƒÂºs','HernÃƒÂ¡ndez','','JS123'),(2,'Jaime Francisco','Duarte','PinzÃƒÂ³n','2013086208');
+INSERT INTO `teacher` VALUES (1,'Jesús','Hernández','','JS123'),(2,'Jaime Francisco','Duarte','Pinzón','2013086208');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -324,6 +324,100 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,'Jaime','jaime@hotmail.com','asd');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'project'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `sp_get_register_info` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_register_info`(IN id INT)
+BEGIN
+  SELECT rt.Id_Register_Teacher as id,
+		CASE ch.Id_Catalog_Hour
+			WHEN  1 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T08:00:00')
+            WHEN  2 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T10:00:00')
+            WHEN  3 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T12:00:00')
+            WHEN  4 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T16:00:00')
+            WHEN  5 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T18:00:00')
+            WHEN  6 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T20:00:00')
+        END as start,
+		CASE ch.Id_Catalog_Hour
+			WHEN  1 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T08:00:00')
+            WHEN  2 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T10:00:00')
+            WHEN  3 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T12:00:00')
+            WHEN  4 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T16:00:00')
+            WHEN  5 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T18:00:00')
+            WHEN  6 THEN  CONCAT(DATE_FORMAT(r.Date,'%Y-%m-%d') , 'T20:00:00')
+        END as end,
+        r.Comments,
+        CONCAT(t.Name, ' ',t.LastName, ' ', IFNULL(t.SecondLastName, ''), ' - ',
+        l.Name, ' - ', s.Name, ' - ', s.Semester, ' - ', c.Name, ' - ' ,r.StudentsAssistanceNumber
+        ,' - ',IFNULL(cc.Description, ''))as title,
+        c.Color as color,
+        ch.Id_Catalog_Hour as Id_Catalog_Hour,
+        t.Id_Teacher as Id_Teacher,
+        cc.Id_Catalog_Circustance as Id_Catalog_Circustance,
+        r.StudentsAssistanceNumber as StudentsAssistanceNumber,
+        r.StudentsAssistanceNumber as students,
+        l.Id_Laboratory as Id_Laboratory,
+        c.Id_Career,
+        s.Semester
+  FROM register_teacher rt LEFT JOIN register r ON r.Id_Register = rt.Id_Register
+						  LEFT JOIN stuff_teacher st ON st.Id_Stuff_Teacher = rt.Id_Stuff_Teacher
+						  LEFT JOIN teacher t ON t.Id_Teacher = st.Id_Teacher
+						  LEFT JOIN laboratory l ON l.Id_Laboratory = r.Id_Laboratory
+						  LEFT JOIN catalog_circustance cc ON cc.Id_Catalog_Circustance = r.Id_RegisterCircustance
+						  LEFT JOIN catalog_hour ch ON ch.Id_Catalog_Hour = r.Id_Catalog_Hour
+						  LEFT JOIN stuff s ON s.Id_Stuff = st.Id_Stuff
+                          LEFT JOIN career c ON c.Id_Career = s.Id_Career
+	WHERE ISNULL(id) OR rt.Id_Register_Teacher = id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_get_report` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_report`(IN reportMonth DATETIME)
+BEGIN
+	SELECT 
+		SUM(r.StudentsAssistanceNumber) as Total,
+		SUM(r.StudentsAssistanceNumber / (WEEK(reportMonth) * 5)) as DailyAvg,
+		c.Name,
+		c.Id_Career
+	FROM register_teacher rt LEFT JOIN register r ON r.Id_Register = rt.Id_Register
+						  LEFT JOIN stuff_teacher st ON st.Id_Stuff_Teacher = rt.Id_Stuff_Teacher
+						  LEFT JOIN teacher t ON t.Id_Teacher = st.Id_Teacher
+						  LEFT JOIN laboratory l ON l.Id_Laboratory = r.Id_Laboratory
+						  LEFT JOIN catalog_circustance cc ON cc.Id_Catalog_Circustance = r.Id_RegisterCircustance
+						  LEFT JOIN catalog_hour ch ON ch.Id_Catalog_Hour = r.Id_Catalog_Hour
+						  LEFT JOIN stuff s ON s.Id_Stuff = st.Id_Stuff
+						  LEFT JOIN career c ON c.Id_Career = s.Id_Career
+	  WHERE MONTH(r.Date) = MONTH(reportMonth) AND YEAR(r.Date) = YEAR(reportMonth)
+	  GROUP BY c.Id_Career;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -334,4 +428,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-07 23:30:11
+-- Dump completed on 2015-12-08 21:55:53
