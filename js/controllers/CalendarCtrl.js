@@ -40,7 +40,6 @@ calendarApp.controller('CalendarCtrl',
     /* event source that contains custom events on the scope */
     $scope.events = [
     ];
-
     /* add custom event*/
     $scope.addRegister = function() {
       $scope.register = this.register;
@@ -50,13 +49,10 @@ calendarApp.controller('CalendarCtrl',
       $scope.register.DateRegister = $scope.LastDateClicked.replace("T", " ");
       var request = $http.post("lib/addRegister.php",JSON.stringify($scope.register));
         request.success(function(data, status, headers, config) {
-          if(data.Status){
-            alert("El maestro no tiene materia asignada en este horario");
-          }
-            angular.forEach(data, function(value , key){
-              $scope.events.push(value);
-            });
-            $scope.showModal = !$scope.showModal;
+          $scope.showModal = false;
+          angular.forEach(data, function(value , key){
+            $scope.events.push(value);
+          });
         });
         request.error(function(data, status, headers, config) {
             alert("Loading teachers failed!");
@@ -69,17 +65,16 @@ calendarApp.controller('CalendarCtrl',
       $scope.register.Id_Student = $scope.register.Id_Student == undefined ? null : $scope.register.Id_Student;
       var request = $http.post("lib/updateRegister.php",JSON.stringify($scope.register));
         request.success(function(data, status, headers, config) {
-
-          $scope.showModal = false;
+          console.log(data);
+          $scope.showEditModal = false;
+          $scope.lastCalEvent = data;
+          uiCalendarConfig.calendars['myCalendar1'].fullCalendar('updateEvent',$scope.lastCalEvent)
         });
         request.error(function(data, status, headers, config) {
             alert("Loading teachers failed!");
       });
     }
     /* remove event */
-    $scope.remove = function(index) {
-      $scope.events.splice(index,1);
-    };
     /* Change View */
     $scope.renderCalender = function(calendar) {
       $timeout(function() {
@@ -88,10 +83,15 @@ calendarApp.controller('CalendarCtrl',
         }
       });
     };
+    $scope.toggleRegisterModal = function(){
+      $scope.showModal = !$scope.showModal;
+    }
+    $scope.toggleEditRegisterModal = function(){
+      $scope.showEditModal = !$scope.showEditModal;
+    }
      /* Render Tooltip */
     $scope.eventRender = function( event, element, view ) {
-        element.attr({'tooltip': event.title,
-                      'tooltip-append-to-body': true});
+          element.html('<span class="removeEvent glyphicon glyphicon-trash pull-right" id="Delete"></span>'+event.title  );
         $compile(element)($scope);
     };
     /* config object */
@@ -116,7 +116,7 @@ calendarApp.controller('CalendarCtrl',
         },
         dayClick: function(date, jsEvent, view, resourceObj) {
           $scope.LastDateClicked = date.format();
-          
+          $scope.toggleRegisterModal();
           var hour =date.format('LT');
           if(hour == "8:00 AM" || hour == "8:30 AM" || hour == "9:00 AM" || hour == "9:30 AM"){
             $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T08:00:00";
@@ -142,19 +142,33 @@ calendarApp.controller('CalendarCtrl',
             $scope.LastDateClicked = $scope.LastDateClicked.split('T')[0] + "T20:00:00";
              $scope.Catalog_Hour = 6;
           }
-
-          $scope.showModal = true;
         },
         eventClick : function(calEvent, jsEvent, view){
-          $scope.showEditModal = true;
-          console.log(calEvent);
+          if (jsEvent.target.id === 'Delete') {
+            console.log($scope.events.indexOf(calEvent));
+            var request = $http.post("lib/deleteRegister.php",JSON.stringify(calEvent.id));
+            request.success(function(data, status, headers, config) {
+              uiCalendarConfig.calendars['myCalendar1'].fullCalendar('removeEvents',calEvent._id);
+            });
+            request.error(function(data, status, headers, config) {
+                alert("Loading teachers failed!");
+            });
+
+            return false;
+          }
+          $scope.toggleEditRegisterModal();
+          $scope.lastCalEvent = calEvent;
+          $scope.register = calEvent;
           $scope.register.Id_Laboratory = calEvent.Id_Laboratory;
           $scope.register.Id_Teacher = calEvent.Id_Teacher;
           $scope.register.Id_RegisterCircustance = calEvent.Id_Catalog_Circustance;
           $scope.register.StudentsAssistanceNumber = calEvent.StudentsAssistanceNumber;
           $scope.register.Id_Register_Teacher = calEvent.id;
           
-        }
+        },
+        viewRender: function (view, element) {
+          $scope.initEvents();
+        },
       }
     };
 

@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	require "connection.php";
 	class Register extends Connection{
 	    public function RegistersList() {
@@ -45,14 +46,16 @@
 
 		    	$timestamp = strtotime($object['DateRegister']);
 		    	$DateRegister = date("Y-m-d H:i:s", $timestamp);
-
+		      	 
 		    	$stuffTeacherId = $this->query('SELECT * FROM stuff_teacher WHERE Id_Teacher ='. $Id_Teacher .' AND  Id_Catalog_Hour = '.$Id_Catalog_Hour);
 		        if(!$stuffTeacherId->num_rows > 0){
-		        	return array('Status'=>400, 'Message' => 'El maestro no tiene asignada materia para esta hora');
+		        	$rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date, Id_Teacher)
+        		 		VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", ".$_SESSION['login_user'].", $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."', $Id_Teacher)");
 	        	}
-
-		        $rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date)
-		        		 VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", 1, $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
+	        	else{
+			        $rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date)
+			        		 VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", ".$_SESSION['login_user'].", $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
+		       }
 		        $lastId = $this->insert_id;
 	        	while($row = $stuffTeacherId->fetch_array(MYSQLI_ASSOC)){
     				$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
@@ -69,7 +72,7 @@
 		        $this->close();
 		        return utf8ize($result);
 	    	}catch (Exception $e){
-	    		echo $e->getMessage();
+	    		echo $_SESSION['login_user'];;
 	    	}
     	}
 	    public function ConsultReport($object) {
@@ -109,7 +112,7 @@
 
 	    public function DeleteRegister($id) {
 	    	try{
-		        $rSQL = $this->query("DELETE FROM Teacher WHERE Id_Teacher = $id");
+		        $rSQL = $this->query("DELETE FROM Register WHERE Id_Register = $id");
 		        $this->close();
 	    	}catch (Exception $e){
 	    		echo $e->getMessage();

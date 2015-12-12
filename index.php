@@ -1,9 +1,10 @@
-<?php
-  session_start();
-  if(empty($_SESSION['login_user']))
-    header('Location: login.php');
-?>
+
 <!DOCTYPE html>
+<?php
+    session_start();
+    if(empty($_SESSION['login_user']))
+        header('Location: login.php');
+?>
 <html lang="es" ng-app="calendarApp" id="top">
     <head>
         <title>Control de alumnos</title>
@@ -40,38 +41,36 @@
                                 <tabset>
                                     <tab select="renderCalender('myCalendar1');" ng-click="refreshSelects();">
                                         <tab-heading>
-                                            <i class="glyphicon glyphicon-bell"></i> Calendario
+                                            <i class="glyphicon glyphicon-calendar"></i> Calendario
                                         </tab-heading>
                                         <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
                                    </tab>
                                    <tab >
                                         <tab-heading>
-                                            <i class="glyphicon glyphicon-bell"></i> Maestros
+                                            <i class="glyphicon glyphicon-user"></i> Maestros
                                         </tab-heading>
                                         <teacher-list></teacher-list>
                                    </tab>
                                    <tab >
                                         <tab-heading>
-                                            <i class="glyphicon glyphicon-bell"></i> Laboratorios
+                                            <i class="glyphicon glyphicon-home"></i> Laboratorios
                                         </tab-heading>
                                         <laboratory-list></laboratory-list>
                                    </tab>
-                                    <tab >
+                                  <tab>
                                         <tab-heading>
-                                            <i class="glyphicon glyphicon-bell"></i> Asignar materias
+                                            <i class="glyphicon glyphicon-list-alt"></i> Asignación de materias
                                         </tab-heading>
                                         <stuff-teacher-list></stuff-teacher-list>
                                    </tab>
-                                   
                                    <tab>
                                         <tab-heading>
-                                            <i class="glyphicon glyphicon-bell"></i> Generar reporte
+                                            <i class="glyphicon glyphicon-file"></i> Generar reporte
                                         </tab-heading>
                                         <report-directive></report-directive>
                                    </tab>
-                                   <a href="logout.php" class="btn btn-success pull-right">Cerrar sesión</a>
+                                    <a href="logout.php" class="btn btn-danger pull-right">Cerrar sesión</a>
                                 </tabset>
-
                             </div>
 
                         </div>
@@ -79,10 +78,10 @@
                     
                 </section>
             </div>
-
-        </div>
-        <edit-register-modal title="Registro" visible="showEditModal"><edit-register-modal>
         <register-modal title="Registro" visible="showModal"><register-modal>
+        </div>
+        
+        <edit-register-modal title="Registro" visible="showEditModal"><edit-register-modal>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-17352735-3']);
@@ -108,21 +107,21 @@
         <script src="vendor/select2/js/select2.min.js"></script>
         <script src="js/calendar.js"></script>
         <script src="js/app.js"></script>
-        <script src="js/directives/Select2Directive.js"></script>
-        <script src="js/directives/RegisterDirective.js"></script>
         <script src="js/controllers/CalendarCtrl.js"></script>
         <script src="js/controllers/TeacherCtrl.js"></script>
         <script src="js/controllers/LaboratoryCtrl.js"></script>
         <script src="js/controllers/ReportCtrl.js"></script>
         <script src="js/controllers/AssignStuffCtrl.js"></script>
+        <script src="js/directives/Select2Directive.js"></script>
         <script src="js/directives/datePickerDirective.js"></script>
+        <script src="js/directives/RegisterDirective.js"></script>
         <script src="js/directives/RegisterTeacherModal.js"></script>
         <script src="js/directives/TeacherListDirective.js"></script>
         <script src="js/directives/RegisterLaboratoryModal.js"></script>
         <script src="js/directives/LaboratoryListDirective.js"></script>
         <script src="js/directives/ReportDirective.js"></script>
         <script src="js/directives/EditRegisterDirective.js"></script>
-        <script src="js/directives/assignStuffDirective.js"></script>
         <script src="js/directives/assignStuffModal.js"></script>
+        <script src="js/directives/assignStuffDirective.js"></script>
     </body>
 </html>

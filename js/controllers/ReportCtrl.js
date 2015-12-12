@@ -33,6 +33,6 @@ calendarApp.controller('ReportCtrl', ['$scope','$http', function ($scope,$http) 
 	    document.body.appendChild(mapForm);
 
 	    mapForm.submit();
-	    mapForm.delete();
+	    $(mapForm).remove();
     }
 }]);

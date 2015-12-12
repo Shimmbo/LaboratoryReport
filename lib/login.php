@@ -14,6 +14,7 @@
 		        $_SESSION['login_user']=$row['Id_User'];
 		        $_SESSION['login_name'] = $row['Name'];
 		        $_SESSION['login_email'] = $row['NameEmail'];
+		        echo "login";
 		    }
 		    $Connection->close();
 		}
