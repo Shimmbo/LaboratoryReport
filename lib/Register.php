@@ -39,7 +39,7 @@
 		    	$Id_Laboratory = utf8_encode($object['Id_Laboratory']);
 		    	$Id_Teacher = utf8_encode($object['Id_Teacher']);
 		    	$Id_Student =empty($object['Id_Student']) ? "NULL" : utf8_encode($object['Id_Student']);
-		    	$Id_RegisterCircustance = empty($object['Id_RegisterCircustance']) ? "NULL" : utf8_encode($object['Id_RegisterCircustance']);
+		    	$Id_RegisterCircustance = empty($object['Id_Catalog_Circustance']) ? "NULL" : utf8_encode($object['Id_Catalog_Circustance']);
 		    
 		    	$StudentsAssistanceNumber = utf8_encode($object['StudentsAssistanceNumber']);
 		    	$Id_Catalog_Hour = utf8_encode($object['Id_Catalog_Hour']);
@@ -51,15 +51,15 @@
 		        if(!$stuffTeacherId->num_rows > 0){
 		        	$rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date, Id_Teacher)
         		 		VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", ".$_SESSION['login_user'].", $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."', $Id_Teacher)");
+		        			        $lastId = $this->insert_id;
+		        	while($row = $stuffTeacherId->fetch_array(MYSQLI_ASSOC)){
+	    				$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
+		        	}
 	        	}
 	        	else{
 			        $rSQL = $this->query("INSERT INTO register (Id_Laboratory, Id_Student, Id_RegisterCircustance, Id_User, StudentsAssistanceNumber, Id_Catalog_Hour,Date)
 			        		 VALUES($Id_Laboratory,". $Id_Student.",". $Id_RegisterCircustance.", ".$_SESSION['login_user'].", $StudentsAssistanceNumber, $Id_Catalog_Hour, '". $DateRegister."')");
 		       }
-		        $lastId = $this->insert_id;
-	        	while($row = $stuffTeacherId->fetch_array(MYSQLI_ASSOC)){
-    				$newSQL = $this->query("INSERT INTO register_teacher (Id_Register, Id_Stuff_Teacher) VALUES ($lastId,".$row["Id_Stuff_Teacher"] .")");
-	        	}
 	        	$lastId = $this->insert_id;
 		        $result = Array();
 		        $rSQL = $this->query('CALL sp_get_register_info ('.$lastId.')') ;

@@ -16,6 +16,11 @@ calendarApp.controller('LaboratoryCtrl', ['$scope','$http', function ($scope,$ht
         $scope.showLaboratoryModal = !$scope.showLaboratoryModal;
     }
     $scope.addLaboratory = function(){
+        if(this.newLaboratory == undefined || this.newLaboratory.Name == "" || this.newLaboratory.Name == undefined || this.newLaboratory.Description == undefined || this.newLaboratory.Description == "" ||
+            this.newLaboratory.NoStudents == "" || this.newLaboratory.NoStudents == undefined){
+            alert("Faltan campos obligatorios");
+            return false;   
+        }
         if(!$scope.isAnUpdate){
             $scope.newLaboratory = this.newLaboratory;
             var request = $http.post("lib/addLaboratory.php",JSON.stringify($scope.newLaboratory));

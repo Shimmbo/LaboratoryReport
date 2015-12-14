@@ -19,7 +19,7 @@
                     </div>
                     <div class="form-group">
                         <label for="LastName">Razón por la que no hubo clases</label>
-                         <select class="form-control" ng-model="register.Id_RegisterCircustance" ng-options="cir.Id_RegisterCircustance as cir.Description for cir in circustances" select2>
+                         <select class="form-control" ng-model="register.Id_Catalog_Circustance" ng-options="cir.Id_Catalog_Circustance as cir.Description for cir in circustances" select2>
                         </select>
                     </div>
                     <div class="form-group">

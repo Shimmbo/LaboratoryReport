@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="css/app.css" />
 
     </head>
-    <body data-spy="scroll" ng-controller="CalendarCtrl" data-ng-init="refreshSelects();initEvents();">
+    <body data-spy="scroll" ng-controller="CalendarCtrl" >
         <header class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">

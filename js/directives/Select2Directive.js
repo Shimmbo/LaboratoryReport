@@ -5,7 +5,7 @@ calendarApp.directive('select2', function($timeout, $parse){
 		require:'ngModel',
 		link:function(scope,element,attrs){
 			$timeout(function (){
-				element.select2();
+				element.select2({width: '100%'  });
 				element.select2Initialized = true;
 			});
 

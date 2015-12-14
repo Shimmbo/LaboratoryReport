@@ -53,7 +53,8 @@
                             success: function(data){
                                 if(data)
                                 {
-                                    $("body").load("index.php").hide().fadeIn(1500).delay(6000);
+                                    
+                                    window.location.href = "index.php"
                                 }
                                 else
                                 {

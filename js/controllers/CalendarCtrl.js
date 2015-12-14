@@ -24,6 +24,7 @@ calendarApp.controller('CalendarCtrl',
           $scope.teachers = arrayOfResults[0].data;
           $scope.laboratories = arrayOfResults[1].data;
           $scope.circustances = arrayOfResults[2].data;
+          console.log($scope.circustances);
       });
     },
     $scope.initEvents = function(){
@@ -43,7 +44,7 @@ calendarApp.controller('CalendarCtrl',
     /* add custom event*/
     $scope.addRegister = function() {
       $scope.register = this.register;
-      $scope.register.Id_RegisterCircustance = $scope.register.Id_RegisterCircustance == undefined ? null : $scope.register.Id_RegisterCircustance; 
+      $scope.register.Id_Catalog_Circustance = $scope.register.Id_Catalog_Circustance == undefined ? null : $scope.register.Id_Catalog_Circustance; 
       $scope.register.Id_Catalog_Hour = $scope.Catalog_Hour;
       $scope.register.Id_Student = $scope.register.Id_Student == undefined ? null : $scope.register.Id_Student;
       $scope.register.DateRegister = $scope.LastDateClicked.replace("T", " ");
@@ -168,6 +169,7 @@ calendarApp.controller('CalendarCtrl',
         },
         viewRender: function (view, element) {
           $scope.initEvents();
+          $scope.refreshSelects();
         },
       }
     };

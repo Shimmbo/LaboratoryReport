@@ -16,6 +16,11 @@ calendarApp.controller('TeacherCtrl', ['$scope','$http', function ($scope,$http)
         $scope.showTeacherModal = !$scope.showTeacherModal;
     }
     $scope.addTeacher = function(){
+        if(this.newTeacher == undefined || this.newTeacher.Name == "" || this.newTeacher.Name == undefined || this.newTeacher.LastName == undefined || this.newTeacher.LastName == "" ||
+            this.newTeacher.Enrollment == "" || this.newTeacher.Enrollment == undefined){
+            alert("Faltan campos obligatorios");
+            return false;   
+        }
         if(!$scope.isAnUpdate){
             $scope.newTeacher = this.newTeacher;
             var request = $http.post("lib/addTeacher.php",JSON.stringify($scope.newTeacher));
@@ -27,7 +32,7 @@ calendarApp.controller('TeacherCtrl', ['$scope','$http', function ($scope,$http)
                 $scope.newTeacher.SecondLastName = "";
                 $scope.newTeacher.Enrollment = "";
                 $scope.newTeacher = {};
-                $scope.showTeacherModal = !$scope.showTeacherModal;
+                $scope.showTeacherModal = false;
             });
             request.error(function(data, status, headers, config) {
                 alert("Loading teachers failed!");
