@@ -93,6 +93,7 @@ calendarApp.controller('CalendarCtrl',
      /* Render Tooltip */
     $scope.eventRender = function( event, element, view ) {
           element.html('<span class="removeEvent glyphicon glyphicon-trash pull-right" id="Delete"></span>'+event.title  );
+          element.attr({'tooltip':event.title, 'tooltip-append-to-body':true});
         $compile(element)($scope);
     };
     /* config object */

@@ -100,3 +100,12 @@ section {
 .calTools{
 	margin-bottom: 10px;
 }
+
+.content {display:none;}
+.preload { 
+    width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}

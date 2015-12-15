@@ -18,6 +18,9 @@
 
     </head>
     <body data-spy="scroll" ng-controller="CalendarCtrl" >
+        <div class="preload">
+<img src="http://i.imgur.com/KUJoe.gif">
+</div>
         <header class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -96,6 +99,11 @@
             })();
         </script>
         <script src="vendor/jquery/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript">
+                $(".preload").fadeOut(2000, function() {
+                    $(".content").fadeIn(1000);        
+                });
+        </script>
         <script src="vendor/bootstrap/bootstrap.min.js" ></script>
         <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js" ></script>
         <script src="vendor/angular/angular.min.js"></script>
