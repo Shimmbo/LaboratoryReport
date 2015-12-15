@@ -101,7 +101,7 @@ CREATE TABLE `laboratory` (
   `Description` varchar(100) DEFAULT NULL,
   `NoStudents` int(11) DEFAULT '0',
   PRIMARY KEY (`Id_Laboratory`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +110,7 @@ CREATE TABLE `laboratory` (
 
 LOCK TABLES `laboratory` WRITE;
 /*!40000 ALTER TABLE `laboratory` DISABLE KEYS */;
-INSERT INTO `laboratory` VALUES (1,'Laboratorio A','MACS',21),(2,'Laboratorio F','Nuevas computadoras',45);
+INSERT INTO `laboratory` VALUES (1,'Laboratorio A','MACS',21),(2,'Laboratorio F','Nuevas computadoras',45),(3,'Laboratorio electrÃƒÂ³nica B','Lab electrÃƒÂ³nica b',30);
 /*!40000 ALTER TABLE `laboratory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,7 +144,7 @@ CREATE TABLE `register` (
   CONSTRAINT `Fk_Id_RegisterCircustance_Register_Catalog_Circustance` FOREIGN KEY (`Id_RegisterCircustance`) REFERENCES `catalog_circustance` (`Id_Catalog_Circustance`),
   CONSTRAINT `Fk_Id_Student_Register_Student` FOREIGN KEY (`Id_Student`) REFERENCES `student` (`Id_Student`),
   CONSTRAINT `Fk_Id_User_Register_User` FOREIGN KEY (`Id_User`) REFERENCES `user` (`Id_User`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,9 +153,30 @@ CREATE TABLE `register` (
 
 LOCK TABLES `register` WRITE;
 /*!40000 ALTER TABLE `register` DISABLE KEYS */;
-INSERT INTO `register` VALUES (1,2,NULL,NULL,1,40,'','2015-12-07 08:00:00',1,1),(2,2,NULL,NULL,1,22,NULL,'2015-12-07 10:00:00',2,2),(3,1,NULL,NULL,1,44,NULL,'2015-12-07 12:00:00',3,1),(5,1,NULL,NULL,1,5,NULL,'2015-12-07 20:00:00',6,1),(6,2,NULL,NULL,1,33,NULL,'2015-11-05 00:00:00',1,2),(7,1,NULL,NULL,1,50,NULL,'2015-11-05 00:00:00',2,1),(8,1,NULL,NULL,1,22,NULL,'2015-12-09 16:00:00',4,1),(10,2,NULL,NULL,1,33,'','2015-12-09 08:00:00',1,4),(12,1,NULL,NULL,1,12,NULL,'2015-12-04 08:00:00',1,2);
+INSERT INTO `register` VALUES (1,2,NULL,NULL,1,40,'','2015-12-07 08:00:00',1,1),(2,2,NULL,NULL,1,22,NULL,'2015-12-07 10:00:00',2,2),(3,1,NULL,NULL,1,44,NULL,'2015-12-07 12:00:00',3,1),(5,1,NULL,NULL,1,5,NULL,'2015-12-07 20:00:00',6,1),(6,2,NULL,NULL,1,33,NULL,'2015-11-05 00:00:00',1,2),(7,1,NULL,NULL,1,50,NULL,'2015-11-05 00:00:00',2,1),(8,1,NULL,NULL,1,22,NULL,'2015-12-09 16:00:00',4,1),(10,2,NULL,NULL,1,33,'','2015-12-09 08:00:00',1,4),(12,1,NULL,NULL,1,12,NULL,'2015-12-04 08:00:00',1,2),(13,1,NULL,NULL,1,12,NULL,'2015-12-14 08:00:00',1,2);
 /*!40000 ALTER TABLE `register` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER before_insert_register
+	BEFORE INSERT ON Register FOR EACH ROW
+	BEGIN
+		IF NEW.Id_RegisterCircustance IS NOT NULL THEN
+			SET NEW.StudentsAssistanceNumber = 0;
+		END IF;
+	END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -280,7 +301,7 @@ CREATE TABLE `stuff_teacher` (
   CONSTRAINT `Fk_Id_Catalog_Hour_Stuff_Teacher` FOREIGN KEY (`Id_Catalog_Hour`) REFERENCES `catalog_hour` (`Id_Catalog_Hour`),
   CONSTRAINT `Fk_Id_Stuff_Stuff_Teacher_Stuff` FOREIGN KEY (`Id_Stuff`) REFERENCES `stuff` (`Id_Stuff`),
   CONSTRAINT `Fk_Id_Teacher_Stuff_Teacher_Teacher` FOREIGN KEY (`Id_Teacher`) REFERENCES `teacher` (`Id_Teacher`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -289,7 +310,7 @@ CREATE TABLE `stuff_teacher` (
 
 LOCK TABLES `stuff_teacher` WRITE;
 /*!40000 ALTER TABLE `stuff_teacher` DISABLE KEYS */;
-INSERT INTO `stuff_teacher` VALUES (1,1,1,1),(2,2,2,2),(3,3,1,3),(4,4,2,5),(5,5,1,6);
+INSERT INTO `stuff_teacher` VALUES (1,1,1,1),(2,2,2,2),(3,3,1,3),(4,4,2,5),(5,5,1,6),(6,1,1,1);
 /*!40000 ALTER TABLE `stuff_teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +328,7 @@ CREATE TABLE `teacher` (
   `SecondLastName` varchar(30) DEFAULT NULL,
   `Enrollment` varchar(30) NOT NULL,
   PRIMARY KEY (`Id_Teacher`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,7 +337,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES (1,'Jesús','Hernández','','JS123'),(2,'Jaime Francisco','Duarte','Pinzón','2013086208'),(4,'Maestro','De','Prueba','Puebsn1023');
+INSERT INTO `teacher` VALUES (1,'Jesús','Hernández','','JS123'),(2,'Jaime Francisco','Duarte','Pinzón','2013086208'),(4,'Maestro','De','Prueba','Puebsn1023'),(5,'asdasd','asdasdas','asdadsa','adasda');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -500,4 +521,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-12 12:47:46
+-- Dump completed on 2015-12-14 18:52:51
